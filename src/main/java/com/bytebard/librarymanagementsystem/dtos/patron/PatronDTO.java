@@ -17,13 +17,13 @@ public class PatronDTO {
 
     private Long id;
 
-    private String libraryCardId;
-
     private String firstName;
 
     private String lastName;
 
     private String email;
+
+    private String phone;
 
     private LocalDate registrationDate;
 

@@ -11,15 +11,15 @@ import javax.crypto.spec.SecretKeySpec;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 public class JwtUtilTest {
 
-    @Autowired
     private JwtUtil jwtUtil;
 
     @BeforeEach
     public void setup() {
-        this.jwtUtil.setSecretKey(Jwts.SIG.HS256.key().build());
+        jwtUtil = new JwtUtil();
+        jwtUtil.setIssuer("TestIssuer");
+        jwtUtil.setSecretKey(Jwts.SIG.HS256.key().build());
     }
 
     @Test

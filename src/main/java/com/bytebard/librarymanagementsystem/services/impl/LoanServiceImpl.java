@@ -34,7 +34,7 @@ public class LoanServiceImpl implements LoanService {
     @Override
     public LoanDTO loanBook(Long bookId, Long patronId) throws NotFoundException, AlreadyExistsException {
         PrecheckResult result = loanPrecheck(bookId, patronId);
-        Optional<Loan> existingLoan = loanRepository.findLoanByBookId(bookId, LocalDate.now());
+        Optional<Loan> existingLoan = loanRepository.findLoanByBookId(bookId);
         if (existingLoan.isPresent()) {
             throw new AlreadyExistsException("Loan for book with id " + bookId + " already exists. Please check back later.");
         }

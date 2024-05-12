@@ -20,9 +20,6 @@ public class Patron {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String libraryCardId;
-
     @Column(nullable = false)
     private String firstName;
 

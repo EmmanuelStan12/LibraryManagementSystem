@@ -42,33 +42,21 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDTO createBook(CreateBookDTO bookDTO) {
-        try {
-            Book book = bookMapper.convertToModel(bookDTO);
-            book = bookRepository.save(book);
-            return bookMapper.convertToDTO(book);
-        } catch (DataIntegrityViolationException e) {
-            System.out.println("Book validation error: " + e.getMessage());
-        }
-        return null;
+        Book book = bookMapper.convertToModel(bookDTO);
+        book = bookRepository.save(book);
+        return bookMapper.convertToDTO(book);
     }
 
     @Override
-    public BookDTO updateBook(UpdateBookDTO bookDTO, Long bookId) {
-        try {
-            Optional<Book> bookOptional = bookRepository.findById(bookId);
-            if (bookOptional.isEmpty()) {
-                throw new NotFoundException("Book with id " + bookId + " not found");
-            }
-            Book book = bookOptional.get();
-            book = bookMapper.copyDTOToModel(bookDTO, book);
-            book = bookRepository.save(book);
-            return bookMapper.convertToDTO(book);
-        } catch (DataIntegrityViolationException e) {
-            System.out.println("Book validation error: " + e.getMessage());
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
+    public BookDTO updateBook(UpdateBookDTO bookDTO, Long bookId) throws NotFoundException {
+        Optional<Book> bookOptional = bookRepository.findById(bookId);
+        if (bookOptional.isEmpty()) {
+            throw new NotFoundException("Book with id " + bookId + " not found");
         }
-        return null;
+        Book book = bookOptional.get();
+        book = bookMapper.copyDTOToModel(bookDTO, book);
+        book = bookRepository.save(book);
+        return bookMapper.convertToDTO(book);
     }
 
     @Override

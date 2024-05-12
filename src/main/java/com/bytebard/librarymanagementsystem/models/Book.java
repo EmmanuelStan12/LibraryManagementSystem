@@ -20,7 +20,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
@@ -37,7 +37,7 @@ public class Book {
     @Enumerated(EnumType.STRING)
     private Genre genre;
 
-    @Column(length = 255)
+    @Column()
     private String isbn;
 
 }

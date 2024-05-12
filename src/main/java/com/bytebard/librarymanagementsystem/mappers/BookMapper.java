@@ -42,8 +42,17 @@ public class BookMapper implements Mapper<Book, BookDTO> {
         );
     }
 
-    public Book convertToModel(CreateBookDTO patronDTO) {
-        return new Book();
+    public Book convertToModel(CreateBookDTO bookDTO) {
+        return new Book(
+                null,
+                bookDTO.getTitle(),
+                bookDTO.getAuthor(),
+                bookDTO.getPublishedDate(),
+                bookDTO.getDescription(),
+                bookDTO.getPrice(),
+                Genre.fromString(bookDTO.getGenre()),
+                bookDTO.getIsbn()
+        );
     }
 
     public Book copyDTOToModel(UpdateBookDTO src, Book dest) {

@@ -53,22 +53,15 @@ public class PatronServiceImpl implements PatronService {
     }
 
     @Override
-    public PatronDTO updatePatron(UpdatePatronDTO patronDTO, Long patronId) {
-        try {
-            Optional<Patron> patronOptional = patronRepository.findById(patronId);
-            if (patronOptional.isEmpty()) {
-                throw new NotFoundException("Patron with id " + patronId + " not found");
-            }
-            Patron patron = patronOptional.get();
-            patron = patronMapper.copyDTOToModel(patronDTO, patron);
-            patron = patronRepository.save(patron);
-            return patronMapper.convertToDTO(patron);
-        } catch (DataIntegrityViolationException e) {
-            System.out.println("Patron validation error: " + e.getMessage());
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
+    public PatronDTO updatePatron(UpdatePatronDTO patronDTO, Long patronId) throws NotFoundException {
+        Optional<Patron> patronOptional = patronRepository.findById(patronId);
+        if (patronOptional.isEmpty()) {
+            throw new NotFoundException("Patron with id " + patronId + " not found");
         }
-        return null;
+        Patron patron = patronOptional.get();
+        patron = patronMapper.copyDTOToModel(patronDTO, patron);
+        patron = patronRepository.save(patron);
+        return patronMapper.convertToDTO(patron);
     }
 
     @Override

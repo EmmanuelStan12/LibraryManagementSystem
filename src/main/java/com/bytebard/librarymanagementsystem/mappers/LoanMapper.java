@@ -2,7 +2,9 @@ package com.bytebard.librarymanagementsystem.mappers;
 
 import com.bytebard.librarymanagementsystem.dtos.loan.LoanDTO;
 import com.bytebard.librarymanagementsystem.models.Loan;
+import org.springframework.stereotype.Component;
 
+@Component
 public class LoanMapper implements Mapper<Loan, LoanDTO> {
 
     @Override

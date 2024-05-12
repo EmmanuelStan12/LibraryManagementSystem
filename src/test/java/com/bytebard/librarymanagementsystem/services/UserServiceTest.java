@@ -122,7 +122,6 @@ public class UserServiceTest {
                 password,
                 "test.username.1"
         );
-
         Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
         User createdUser = Assertions.assertDoesNotThrow(() -> userService.register(user));
         assertNotNull(createdUser);

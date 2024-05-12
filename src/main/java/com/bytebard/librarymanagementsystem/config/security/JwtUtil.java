@@ -3,6 +3,7 @@ package com.bytebard.librarymanagementsystem.config.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -13,10 +14,11 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
+    @Setter
     @Value("${spring.application.name}")
-    public String issuer;
+    private String issuer;
 
-    public SecretKey secretKey;
+    private SecretKey secretKey;
 
     @Autowired
     public void setSecretKey(SecretKey secretKey) {
