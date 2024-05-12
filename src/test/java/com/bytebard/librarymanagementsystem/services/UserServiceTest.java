@@ -1,8 +1,10 @@
-package com.bytebard.librarymanagementsystem.user.domain;
+package com.bytebard.librarymanagementsystem.services;
 
+import com.bytebard.librarymanagementsystem.services.impl.UserServiceImpl;
 import com.bytebard.sharespace.user.UserMapper;
 import com.bytebard.sharespace.user.data.UserEntity;
 import com.bytebard.sharespace.user.data.UserRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -132,7 +134,7 @@ public class UserServiceTest {
         );
         UserEntity userEntity = UserMapper.toUserEntity(user);
         Mockito.when(userRepository.save(Mockito.any(UserEntity.class))).thenReturn(userEntity);
-        User createdUser = assertDoesNotThrow(() -> userService.register(user));
+        User createdUser = Assertions.assertDoesNotThrow(() -> userService.register(user));
         assertNotNull(createdUser);
         assertEquals(user.getUsername(), createdUser.getUsername());
         assertEquals(user.getEmail(), createdUser.getEmail());

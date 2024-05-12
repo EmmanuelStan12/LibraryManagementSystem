@@ -1,6 +1,6 @@
 package com.bytebard.librarymanagementsystem.exception_handlers;
 
-import com.bytebard.sharespace.shared.ApiErrorResponse;
+import com.bytebard.librarymanagementsystem.dtos.ApiErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

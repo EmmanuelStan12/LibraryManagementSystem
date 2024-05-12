@@ -1,4 +1,4 @@
-package com.bytebard.librarymanagementsystem.dtos;
+package com.bytebard.librarymanagementsystem.dtos.auth;
 
 import com.bytebard.sharespace.shared.validators.annotations.ValidEmail;
 import com.bytebard.sharespace.shared.validators.annotations.ValidPassword;

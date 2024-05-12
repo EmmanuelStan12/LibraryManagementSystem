@@ -2,8 +2,8 @@ package com.bytebard.librarymanagementsystem.controllers;
 
 import com.bytebard.librarymanagementsystem.config.security.JwtAuthenticationTokenProvider;
 import com.bytebard.librarymanagementsystem.dtos.ApiResponse;
-import com.bytebard.librarymanagementsystem.dtos.LoginDTO;
-import com.bytebard.librarymanagementsystem.dtos.SignupDTO;
+import com.bytebard.librarymanagementsystem.dtos.auth.LoginDTO;
+import com.bytebard.librarymanagementsystem.dtos.auth.SignupDTO;
 import com.bytebard.librarymanagementsystem.mappers.UserMapper;
 import com.bytebard.librarymanagementsystem.models.User;
 import com.bytebard.librarymanagementsystem.services.UserService;
@@ -27,9 +27,12 @@ public class AuthController {
 
     private final JwtAuthenticationTokenProvider authenticationProvider;
 
-    public AuthController(final UserService userService, JwtAuthenticationTokenProvider authenticationProvider) {
+    private final UserMapper userMapper;
+
+    public AuthController(final UserService userService, JwtAuthenticationTokenProvider authenticationProvider, UserMapper userMapper) {
         this.userService = userService;
         this.authenticationProvider = authenticationProvider;
+        this.userMapper = userMapper;
     }
 
     @PostMapping("login")
@@ -41,7 +44,7 @@ public class AuthController {
 
     @PostMapping("signup")
     public ResponseEntity<ApiResponse<Object>> signup(@RequestBody SignupDTO signupDTO) throws Exception {
-        User user = toUser(signupDTO);
+        User user = userMapper.convertToModel(signupDTO);
         user = userService.register(user);
         authenticationProvider.verifyUser(user);
         Map<String, Object> response = generateAuthResponse(user);
@@ -50,21 +53,9 @@ public class AuthController {
 
     private Map<String, Object> generateAuthResponse(User user) {
         Map<String, Object> response = new HashMap<>();
-        response.put("user", UserMapper.toUserDTO(user));
+        response.put("user", userMapper.convertToDTO(user));
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         response.put("token", authentication.getCredentials().toString());
         return response;
-    }
-
-    public User toUser(final SignupDTO dto) {
-        return new User(
-                null,
-                dto.getFirstname(),
-                dto.getLastname(),
-                dto.getEmail(),
-                dto.getPassword(),
-                null,
-                dto.getUsername()
-        );
     }
 }

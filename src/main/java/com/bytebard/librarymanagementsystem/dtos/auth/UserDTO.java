@@ -1,4 +1,4 @@
-package com.bytebard.librarymanagementsystem.dtos;
+package com.bytebard.librarymanagementsystem.dtos.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +17,6 @@ public class UserDTO {
     private String firstname;
     private String lastname;
     private String email;
-    private String bio;
     private String username;
 
     @Override
@@ -27,7 +26,6 @@ public class UserDTO {
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", email='" + email + '\'' +
-                ", bio='" + bio + '\'' +
                 ", username='" + username + '\'' +
                 '}';
     }

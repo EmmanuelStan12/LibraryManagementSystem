@@ -1,12 +1,19 @@
 package com.bytebard.librarymanagementsystem.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@Entity(name = "Patrons")
 public class Patron {
 
     @Id
@@ -24,6 +31,9 @@ public class Patron {
 
     @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false)
+    private String phone;
 
     @Column(nullable = false)
     private LocalDate registrationDate;

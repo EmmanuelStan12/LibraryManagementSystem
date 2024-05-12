@@ -1,4 +1,4 @@
-package com.bytebard.librarymanagementsystem.dtos;
+package com.bytebard.librarymanagementsystem.dtos.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
