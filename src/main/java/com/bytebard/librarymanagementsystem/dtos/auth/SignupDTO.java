@@ -1,7 +1,7 @@
 package com.bytebard.librarymanagementsystem.dtos.auth;
 
-import com.bytebard.sharespace.shared.validators.annotations.ValidEmail;
-import com.bytebard.sharespace.shared.validators.annotations.ValidPassword;
+import com.bytebard.librarymanagementsystem.validators.ValidEmail;
+import com.bytebard.librarymanagementsystem.validators.ValidPassword;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

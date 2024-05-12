@@ -11,10 +11,12 @@ import com.bytebard.librarymanagementsystem.repository.BookRepository;
 import com.bytebard.librarymanagementsystem.repository.LoanRepository;
 import com.bytebard.librarymanagementsystem.repository.PatronRepository;
 import com.bytebard.librarymanagementsystem.services.LoanService;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
+@Service
 public class LoanServiceImpl implements LoanService {
 
     private final LoanRepository loanRepository;

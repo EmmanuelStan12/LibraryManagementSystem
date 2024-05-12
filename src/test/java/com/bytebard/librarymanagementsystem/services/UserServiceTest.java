@@ -1,9 +1,9 @@
 package com.bytebard.librarymanagementsystem.services;
 
+import com.bytebard.librarymanagementsystem.mappers.UserMapper;
+import com.bytebard.librarymanagementsystem.models.User;
+import com.bytebard.librarymanagementsystem.repository.UserRepository;
 import com.bytebard.librarymanagementsystem.services.impl.UserServiceImpl;
-import com.bytebard.sharespace.user.UserMapper;
-import com.bytebard.sharespace.user.data.UserEntity;
-import com.bytebard.sharespace.user.data.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,16 +23,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class UserServiceTest {
 
-    @TestConfiguration
-    public static class DefaultConfig {
-
-        @Bean
-        public UserService userService() {
-            return new UserServiceImpl();
-        }
-    }
-
-    @Autowired
     private UserService userService;
 
     @MockBean
@@ -41,16 +31,19 @@ public class UserServiceTest {
     @MockBean
     private PasswordEncoder passwordEncoder;
 
+    @MockBean
+    private UserMapper userMapper;
+
     @BeforeEach
     public void setUp() {
+        userService = new UserServiceImpl(userRepository, passwordEncoder, userMapper);
         String password = passwordEncoder.encode("test.password");
-        UserEntity user = new UserEntity(
+        User user = new User(
                 1L,
                 "test.firstname",
                 "test.lastname",
                 "test.email",
                 password,
-                "test.bio",
                 "test.username"
         );
 
@@ -97,7 +90,6 @@ public class UserServiceTest {
                 "test.lastname",
                 "test.email",
                 password,
-                "test.bio",
                 "test.username"
         );
         Exception exception = assertThrows(Exception.class, () -> userService.register(user));
@@ -113,7 +105,6 @@ public class UserServiceTest {
                 "test.lastname",
                 "test.email.1",
                 password,
-                "test.bio",
                 "test.username"
         );
         Exception exception = assertThrows(Exception.class, () -> userService.register(user));
@@ -129,11 +120,10 @@ public class UserServiceTest {
                 "test.lastname",
                 "test.email1.1",
                 password,
-                "test.bio",
                 "test.username.1"
         );
-        UserEntity userEntity = UserMapper.toUserEntity(user);
-        Mockito.when(userRepository.save(Mockito.any(UserEntity.class))).thenReturn(userEntity);
+
+        Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
         User createdUser = Assertions.assertDoesNotThrow(() -> userService.register(user));
         assertNotNull(createdUser);
         assertEquals(user.getUsername(), createdUser.getUsername());
