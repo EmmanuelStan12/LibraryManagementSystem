@@ -51,7 +51,7 @@ There are two ways to run the project, you could use docker or use a more tradit
 
 ## API Documentation
 To access the api documentation, please run the application and check `http://127.0.0.1:<host-port>/swagger-ui/index.html`.
-You can test the endpoints using the `library_management_system_tests.http` file in the root directory.
+You can also test the endpoints using the `library_management_system_tests.http` file in the root directory.
 
 ## Major features
 
