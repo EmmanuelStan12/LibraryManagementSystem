@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,6 +23,7 @@ public class CreatePatronDTO {
     @ValidEmail
     private String email;
 
+    @NotEmpty(message = "Phone number cannot be empty")
     private String phone;
 
 }

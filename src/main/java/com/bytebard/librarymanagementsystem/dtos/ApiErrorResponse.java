@@ -12,19 +12,19 @@ import java.util.List;
 @Setter
 public class ApiErrorResponse {
 
-    private HttpStatus statusCode;
+    private int statusCode;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private LocalDateTime timestamp;
     private String message;
     private List<String> errors;
 
-    public ApiErrorResponse(HttpStatus statusCode, String message) {
+    public ApiErrorResponse(int statusCode, String message) {
         this.statusCode = statusCode;
         this.message = message;
         timestamp = LocalDateTime.now();
     }
 
-    public ApiErrorResponse(HttpStatus statusCode, String message, List<String> errors) {
+    public ApiErrorResponse(int statusCode, String message, List<String> errors) {
         this.statusCode = statusCode;
         this.message = message;
         timestamp = LocalDateTime.now();

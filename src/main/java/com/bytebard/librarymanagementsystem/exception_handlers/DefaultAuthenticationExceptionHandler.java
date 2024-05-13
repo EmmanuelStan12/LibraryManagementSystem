@@ -1,26 +1,23 @@
 package com.bytebard.librarymanagementsystem.exception_handlers;
 
 import com.bytebard.librarymanagementsystem.dtos.ApiErrorResponse;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.boot.web.servlet.error.ErrorController;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.naming.AuthenticationException;
+@ControllerAdvice
+public class DefaultAuthenticationExceptionHandler {
 
-@Order(Ordered.HIGHEST_PRECEDENCE)
-@RestController
-@RestControllerAdvice
-@ResponseBody
-public class DefaultAuthenticationExceptionHandler implements ErrorController {
-
-    @ExceptionHandler(value = {AuthenticationException.class})
+    @ExceptionHandler(value = {AuthenticationException.class, AuthenticationCredentialsNotFoundException.class})
     public ResponseEntity<Object> handleAuthenticationException(Exception ex) {
-        ApiErrorResponse restError = new ApiErrorResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        String message = ex.getMessage();
+        if (ex instanceof AuthenticationCredentialsNotFoundException) {
+            message = "Invalid JWT Token or Authentication Credentials";
+        }
+        ApiErrorResponse restError = new ApiErrorResponse(HttpStatus.UNAUTHORIZED.value(), message);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(restError);
     }
 }

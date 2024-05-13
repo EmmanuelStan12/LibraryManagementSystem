@@ -27,11 +27,6 @@ public class DefaultSecurityConfig {
     public String secretKey;
 
     @Bean
-    public JwtAuthenticationTokenProvider jwtAuthenticationTokenProvider(UserService userService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
-        return new JwtAuthenticationTokenProvider(userService, passwordEncoder, jwtUtil);
-    }
-
-    @Bean
     public JwtTokenFilter jwtTokenFilter(
             UserDetailsService userDetailsService,
             HandlerExceptionResolver handlerExceptionResolver,
@@ -49,10 +44,11 @@ public class DefaultSecurityConfig {
         http.httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
+                .anonymous(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/api/v1/auth/login", "/api/v1/auth/signup")
+                        .requestMatchers("/api/auth/login", "/api/auth/signup")
                         .permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(e -> e.authenticationEntryPoint(delegatedAuthenticationEntryPoint));
@@ -62,7 +58,7 @@ public class DefaultSecurityConfig {
 
     @Bean
     public SecretKey secretKey() {
-        return new SecretKeySpec(secretKey.getBytes(), "HS256");
+        return new SecretKeySpec(secretKey.getBytes(), "HmacSHA256");
     }
 
     @Bean

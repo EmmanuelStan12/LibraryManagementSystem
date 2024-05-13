@@ -10,6 +10,7 @@ import com.bytebard.librarymanagementsystem.repository.BookRepository;
 import com.bytebard.librarymanagementsystem.services.BookService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +41,7 @@ public class BookServiceImpl implements BookService {
         return bookMapper.convertToDTO(book.get());
     }
 
+    @Transactional
     @Override
     public BookDTO createBook(CreateBookDTO bookDTO) {
         Book book = bookMapper.convertToModel(bookDTO);
@@ -47,6 +49,7 @@ public class BookServiceImpl implements BookService {
         return bookMapper.convertToDTO(book);
     }
 
+    @Transactional
     @Override
     public BookDTO updateBook(UpdateBookDTO bookDTO, Long bookId) throws NotFoundException {
         Optional<Book> bookOptional = bookRepository.findById(bookId);
@@ -59,6 +62,7 @@ public class BookServiceImpl implements BookService {
         return bookMapper.convertToDTO(book);
     }
 
+    @Transactional
     @Override
     public void deleteBook(long id) throws NotFoundException {
         Optional<Book> bookOptional = bookRepository.findById(id);

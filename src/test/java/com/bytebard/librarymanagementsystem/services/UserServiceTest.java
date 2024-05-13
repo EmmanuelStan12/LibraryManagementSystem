@@ -1,60 +1,34 @@
 package com.bytebard.librarymanagementsystem.services;
 
-import com.bytebard.librarymanagementsystem.mappers.UserMapper;
+import com.bytebard.librarymanagementsystem.exceptions.AlreadyExistsException;
 import com.bytebard.librarymanagementsystem.models.User;
 import com.bytebard.librarymanagementsystem.repository.UserRepository;
-import com.bytebard.librarymanagementsystem.services.impl.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
 public class UserServiceTest {
 
+    @Autowired
     private UserService userService;
 
-    @MockBean
+    @Autowired
     private UserRepository userRepository;
 
-    @MockBean
+    @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @MockBean
-    private UserMapper userMapper;
-
-    @BeforeEach
-    public void setUp() {
-        userService = new UserServiceImpl(userRepository, passwordEncoder, userMapper);
-        String password = passwordEncoder.encode("test.password");
-        User user = new User(
-                1L,
-                "test.firstname",
-                "test.lastname",
-                "test.email",
-                password,
-                "test.username"
-        );
-
-        Mockito.when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
-        Mockito.when(userRepository.findByEmailOrUsername(user.getUsername())).thenReturn(Optional.of(user));
-        Mockito.when(userRepository.findByEmailOrUsername(user.getEmail())).thenReturn(Optional.of(user));
-        Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
-    }
 
     @Test
     public void test_findByUsername_existingUser() {
+        createTestUser();
         String username = "test.username";
         User user = userService.findByUsername(username);
         assertNotNull(user);
@@ -69,9 +43,9 @@ public class UserServiceTest {
 
     @Test
     public void test_findByEmail_existingUser() {
+        createTestUser();
         String email = "test.email";
-        User user = userService.findByUsername(email);
-        assertNotNull(user);
+        User user = assertDoesNotThrow(() -> userService.findByUsername(email));
         assertEquals(user.getEmail(), email);
     }
 
@@ -83,6 +57,52 @@ public class UserServiceTest {
 
     @Test
     public void test_register_existingEmail() {
+        createTestUser();
+        User user = new User(
+                null,
+                "test.firstname",
+                "test.lastname",
+                "test.email",
+                "test.password",
+                "test.username"
+        );
+        AlreadyExistsException exception = assertThrows(AlreadyExistsException.class, () -> userService.register(user));
+        assertEquals(exception.getMessage(), "Email already exists");
+    }
+
+    @Test
+    public void test_register_existingUsername() {
+        createTestUser();
+        User user = new User(
+                null,
+                "test.firstname",
+                "test.lastname",
+                "test.email.1",
+                "test.password",
+                "test.username"
+        );
+        AlreadyExistsException exception = assertThrows(AlreadyExistsException.class, () -> userService.register(user));
+        assertEquals(exception.getMessage(), "Username already exists");
+    }
+
+    @Test
+    public void test_register_newUser() {
+        User user = new User(
+                null,
+                "test.firstname",
+                "test.lastname",
+                "test.email1.1",
+                "test.password",
+                "test.username.1"
+        );
+        User createdUser = Assertions.assertDoesNotThrow(() -> userService.register(user));
+        assertNotNull(createdUser);
+        assertEquals(user.getUsername(), createdUser.getUsername());
+        assertEquals(user.getEmail(), createdUser.getEmail());
+        assertNotEquals("test.password", createdUser.getPassword());
+    }
+
+    private void createTestUser() {
         String password = passwordEncoder.encode("test.password");
         User user = new User(
                 null,
@@ -92,42 +112,7 @@ public class UserServiceTest {
                 password,
                 "test.username"
         );
-        Exception exception = assertThrows(Exception.class, () -> userService.register(user));
-        assertEquals(exception.getMessage(), "Email already exists");
-    }
 
-    @Test
-    public void test_register_existingUsername() {
-        String password = passwordEncoder.encode("test.password");
-        User user = new User(
-                null,
-                "test.firstname",
-                "test.lastname",
-                "test.email.1",
-                password,
-                "test.username"
-        );
-        Exception exception = assertThrows(Exception.class, () -> userService.register(user));
-        assertEquals(exception.getMessage(), "Username already exists");
-    }
-
-    @Test
-    public void test_register_newUser() {
-        String password = passwordEncoder.encode("test.password");
-        User user = new User(
-                2L,
-                "test.firstname",
-                "test.lastname",
-                "test.email1.1",
-                password,
-                "test.username.1"
-        );
-        Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
-        User createdUser = Assertions.assertDoesNotThrow(() -> userService.register(user));
-        assertNotNull(createdUser);
-        assertEquals(user.getUsername(), createdUser.getUsername());
-        assertEquals(user.getEmail(), createdUser.getEmail());
-        assertNotEquals("test.password", createdUser.getPassword());
-        assertEquals(password, createdUser.getPassword());
+        userRepository.save(user);
     }
 }

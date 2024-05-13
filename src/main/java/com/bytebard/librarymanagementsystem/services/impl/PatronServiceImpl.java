@@ -10,6 +10,7 @@ import com.bytebard.librarymanagementsystem.repository.PatronRepository;
 import com.bytebard.librarymanagementsystem.services.PatronService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +41,7 @@ public class PatronServiceImpl implements PatronService {
         return patronMapper.convertToDTO(patron.get());
     }
 
+    @Transactional
     @Override
     public PatronDTO createPatron(CreatePatronDTO patronDTO) {
         try {
@@ -52,6 +54,7 @@ public class PatronServiceImpl implements PatronService {
         return null;
     }
 
+    @Transactional
     @Override
     public PatronDTO updatePatron(UpdatePatronDTO patronDTO, Long patronId) throws NotFoundException {
         Optional<Patron> patronOptional = patronRepository.findById(patronId);
@@ -64,6 +67,7 @@ public class PatronServiceImpl implements PatronService {
         return patronMapper.convertToDTO(patron);
     }
 
+    @Transactional
     @Override
     public void deletePatron(Long id) throws NotFoundException {
         Optional<Patron> patronOptional = patronRepository.findById(id);

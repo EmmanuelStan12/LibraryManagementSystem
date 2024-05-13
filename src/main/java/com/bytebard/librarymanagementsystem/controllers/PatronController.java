@@ -7,6 +7,10 @@ import com.bytebard.librarymanagementsystem.dtos.patron.UpdatePatronDTO;
 import com.bytebard.librarymanagementsystem.exceptions.NotFoundException;
 import com.bytebard.librarymanagementsystem.models.Patron;
 import com.bytebard.librarymanagementsystem.services.PatronService;
+import jakarta.validation.Valid;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +29,7 @@ public class PatronController {
     }
 
     @GetMapping
+    @CachePut("patrons")
     public ResponseEntity<ApiResponse<List<PatronDTO>>> getAll() {
         return new ResponseEntity<>(
                 new ApiResponse<>(HttpStatus.OK.value(), null, patronService.getAllPatrons()),
@@ -41,7 +46,8 @@ public class PatronController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<PatronDTO>> createPatron(@RequestBody final CreatePatronDTO createPatronDTO) {
+    @CacheEvict(value = "patrons", allEntries = true)
+    public ResponseEntity<ApiResponse<PatronDTO>> createPatron(@Valid @RequestBody final CreatePatronDTO createPatronDTO) {
         return new ResponseEntity<>(
                 new ApiResponse<>(HttpStatus.CREATED.value(), null, patronService.createPatron(createPatronDTO)),
                 HttpStatus.CREATED
@@ -49,6 +55,7 @@ public class PatronController {
     }
 
     @PutMapping("/{id}")
+    @CacheEvict(value = "patrons", allEntries = true)
     public ResponseEntity<ApiResponse<PatronDTO>> updatePatron(@PathVariable final Long id, @RequestBody final UpdatePatronDTO updatePatronDTO) throws NotFoundException {
         return new ResponseEntity<>(
                 new ApiResponse<>(HttpStatus.OK.value(), null, patronService.updatePatron(updatePatronDTO, id)),
@@ -57,6 +64,7 @@ public class PatronController {
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict(value = "patrons", allEntries = true)
     public ResponseEntity<ApiResponse<PatronDTO>> deletePatron(@PathVariable final Long id) throws NotFoundException {
         patronService.deletePatron(id);
         return new ResponseEntity<>(

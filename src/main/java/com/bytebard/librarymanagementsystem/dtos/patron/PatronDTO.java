@@ -27,6 +27,4 @@ public class PatronDTO {
 
     private LocalDate registrationDate;
 
-    private List<LoanDTO> loans;
-
 }

@@ -12,6 +12,7 @@ import com.bytebard.librarymanagementsystem.repository.LoanRepository;
 import com.bytebard.librarymanagementsystem.repository.PatronRepository;
 import com.bytebard.librarymanagementsystem.services.LoanService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -31,17 +32,20 @@ public class LoanServiceImpl implements LoanService {
         this.patronRepository = patronRepository;
     }
 
+    @Transactional
     @Override
     public LoanDTO loanBook(Long bookId, Long patronId) throws NotFoundException, AlreadyExistsException {
-        PrecheckResult result = loanPrecheck(bookId, patronId);
+        validateBookAndPatron(bookId, patronId);
+        Book book = bookRepository.findById(bookId).get();
+        Patron patron = patronRepository.findById(patronId).get();
         Optional<Loan> existingLoan = loanRepository.findLoanByBookId(bookId);
         if (existingLoan.isPresent()) {
             throw new AlreadyExistsException("Loan for book with id " + bookId + " already exists. Please check back later.");
         }
         Loan loan = new Loan(
                 null,
-                result.patron().get(),
-                result.book().get(),
+                patron,
+                book,
                 LocalDate.now(),
                 null
         );
@@ -50,9 +54,10 @@ public class LoanServiceImpl implements LoanService {
         return loanMapper.convertToDTO(loan);
     }
 
+    @Transactional
     @Override
     public LoanDTO returnBook(Long bookId, Long patronId) throws NotFoundException {
-        loanPrecheck(bookId, patronId);
+        validateBookAndPatron(bookId, patronId);
         Optional<Loan> existingLoan = loanRepository.findLoanByBookIdAndPatronId(bookId, patronId);
         if (existingLoan.isEmpty()) {
             throw new NotFoundException("Loan for book with id " + bookId + " does not exist.");
@@ -64,19 +69,12 @@ public class LoanServiceImpl implements LoanService {
         return loanMapper.convertToDTO(loan);
     }
 
-    private PrecheckResult loanPrecheck(Long bookId, Long patronId) throws NotFoundException {
-        Optional<Book> book = bookRepository.findById(bookId);
-        if (book.isEmpty()) {
+    private void validateBookAndPatron(Long bookId, Long patronId) throws NotFoundException {
+        if (!bookRepository.existsById(bookId)) {
             throw new NotFoundException("Book with id " + bookId + " not found");
         }
-        Optional<Patron> patron = patronRepository.findById(patronId);
-        if (patron.isEmpty()) {
+        if (!patronRepository.existsById(patronId)) {
             throw new NotFoundException("Patron with id " + patronId + " not found");
         }
-        PrecheckResult result = new PrecheckResult(book, patron);
-        return result;
-    }
-
-    private record PrecheckResult(Optional<Book> book, Optional<Patron> patron) {
     }
 }

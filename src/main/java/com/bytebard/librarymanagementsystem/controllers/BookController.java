@@ -6,6 +6,10 @@ import com.bytebard.librarymanagementsystem.dtos.book.BookDTO;
 import com.bytebard.librarymanagementsystem.dtos.book.UpdateBookDTO;
 import com.bytebard.librarymanagementsystem.exceptions.NotFoundException;
 import com.bytebard.librarymanagementsystem.services.BookService;
+import jakarta.validation.Valid;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +27,7 @@ public class BookController {
     }
 
     @GetMapping
+    @CachePut("books")
     public ResponseEntity<ApiResponse<List<BookDTO>>> getAll() {
         return new ResponseEntity<>(
                 new ApiResponse<>(HttpStatus.OK.value(), null, bookService.getAllBooks()),
@@ -39,7 +44,8 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<BookDTO>> createBook(@RequestBody final CreateBookDTO createBookDTO) {
+    @CacheEvict(value = "books", allEntries = true)
+    public ResponseEntity<ApiResponse<BookDTO>> createBook(@Valid  @RequestBody final CreateBookDTO createBookDTO) {
         return new ResponseEntity<>(
                 new ApiResponse<>(HttpStatus.CREATED.value(), null, bookService.createBook(createBookDTO)),
                 HttpStatus.CREATED
@@ -47,6 +53,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
+    @CacheEvict(value = "books", allEntries = true)
     public ResponseEntity<ApiResponse<BookDTO>> updateBook(@PathVariable final Long id, @RequestBody final UpdateBookDTO updateBookDTO) throws NotFoundException {
         return new ResponseEntity<>(
                 new ApiResponse<>(HttpStatus.OK.value(), null, bookService.updateBook(updateBookDTO, id)),
@@ -55,6 +62,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict(value = "books", allEntries = true)
     public ResponseEntity<ApiResponse<BookDTO>> deleteBook(@PathVariable final Long id) throws NotFoundException {
         bookService.deleteBook(id);
         return new ResponseEntity<>(

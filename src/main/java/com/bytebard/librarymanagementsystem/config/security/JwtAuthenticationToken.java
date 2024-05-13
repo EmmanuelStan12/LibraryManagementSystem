@@ -13,10 +13,12 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         super(authorities);
         this.principal = principal;
         this.credentials = credentials;
+        setAuthenticated(true);
     }
 
     public JwtAuthenticationToken(Object principal, Object credentials) {
         this(principal, credentials, null);
+        setAuthenticated(true);
     }
 
     @Override

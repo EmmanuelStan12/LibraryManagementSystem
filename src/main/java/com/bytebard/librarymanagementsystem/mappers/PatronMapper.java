@@ -20,27 +20,18 @@ public class PatronMapper implements Mapper<Patron, PatronDTO> {
 
     @Override
     public PatronDTO convertToDTO(Patron patron) {
-        List<LoanDTO> loans = List.of();
-        if (!CollectionUtils.isEmpty(patron.getLoans())) {
-            loans = patron.getLoans().stream().map(loan -> new LoanMapper().convertToDTO(loan)).toList();
-        }
         return new PatronDTO(
                 patron.getId(),
                 patron.getFirstName(),
                 patron.getLastName(),
                 patron.getEmail(),
                 patron.getPhone(),
-                patron.getRegistrationDate(),
-                loans
+                patron.getRegistrationDate()
         );
     }
 
     @Override
     public Patron convertToModel(PatronDTO patronDTO) {
-        List<Loan> loans = List.of();
-        if (!CollectionUtils.isEmpty(patronDTO.getLoans())) {
-            loans = patronDTO.getLoans().stream().map(loan -> new LoanMapper().convertToModel(loan)).toList();
-        }
         return new Patron(
                 patronDTO.getId(),
                 patronDTO.getFirstName(),
@@ -48,7 +39,7 @@ public class PatronMapper implements Mapper<Patron, PatronDTO> {
                 patronDTO.getEmail(),
                 patronDTO.getPhone(),
                 patronDTO.getRegistrationDate(),
-                loans
+                null
         );
     }
 
