@@ -1,4 +1,4 @@
-# Library Management System API Documentation
+# Library Management System
 
 This project is a Library Management System API built using Spring Boot. It allows librarians to manage books, patrons, and borrowing records (loans).
 
