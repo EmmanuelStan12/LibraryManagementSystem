@@ -16,12 +16,11 @@ public class LoggingAspect {
 
     private final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
 
-    @Pointcut("execution(public * com.bytebard.librarymanagementsystem.*.*(..))")
+    @Pointcut("execution(public * com.bytebard.librarymanagementsystem.*.*.*.*(..))")
     private void loggingPointcut() {}
 
     @Before("loggingPointcut()")
     public void logBefore(JoinPoint joinPoint) {
-        System.out.println("Before");
-        logger.info("Calling method: {} with arguments: {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
+        logger.info("Calling method: {}", joinPoint.getSignature().getName());
     }
 }

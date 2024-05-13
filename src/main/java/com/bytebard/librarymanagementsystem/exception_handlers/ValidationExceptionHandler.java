@@ -11,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 public class ValidationExceptionHandler {
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ApiErrorResponse> handleValidationExceptions(
             HttpServletRequest request, MethodArgumentNotValidException ex) {
         List<String> errors = new ArrayList<>();
@@ -29,10 +31,20 @@ public class ValidationExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
-    @ExceptionHandler({NotFoundException.class, UsernameNotFoundException.class, AlreadyExistsException.class})
+    @ExceptionHandler({NotFoundException.class, UsernameNotFoundException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ApiErrorResponse> handleNotFoundExceptions(
             HttpServletRequest request, Exception ex) {
-        HttpStatus status = ex instanceof AlreadyExistsException ? HttpStatus.BAD_REQUEST : HttpStatus.NOT_FOUND;
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ApiErrorResponse response = new ApiErrorResponse(status.value(), ex.getMessage());
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @ExceptionHandler({AlreadyExistsException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApiErrorResponse> handleBadRequestExceptions(
+            HttpServletRequest request, Exception ex) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         ApiErrorResponse response = new ApiErrorResponse(status.value(), ex.getMessage());
         return ResponseEntity.status(status).body(response);
     }

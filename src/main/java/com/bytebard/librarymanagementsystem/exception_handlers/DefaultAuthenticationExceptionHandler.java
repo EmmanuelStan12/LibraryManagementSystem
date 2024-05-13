@@ -7,12 +7,14 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 public class DefaultAuthenticationExceptionHandler {
 
     @ExceptionHandler(value = {AuthenticationException.class, AuthenticationCredentialsNotFoundException.class})
-    public ResponseEntity<Object> handleAuthenticationException(Exception ex) {
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<ApiErrorResponse> handleAuthenticationException(Exception ex) {
         String message = ex.getMessage();
         if (ex instanceof AuthenticationCredentialsNotFoundException) {
             message = "Invalid JWT Token or Authentication Credentials";

@@ -20,7 +20,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 public class DefaultSecurityConfig {
 
     @Value("${spring.jwt.secret.key}")
@@ -48,7 +48,7 @@ public class DefaultSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/api/auth/login", "/api/auth/signup")
+                        .requestMatchers("/api/auth/login", "/api/auth/signup", "/api-docs/**", "/v3/api-docs/**", "/swagger-ui/**", "swagger-resources/**")
                         .permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(e -> e.authenticationEntryPoint(delegatedAuthenticationEntryPoint));

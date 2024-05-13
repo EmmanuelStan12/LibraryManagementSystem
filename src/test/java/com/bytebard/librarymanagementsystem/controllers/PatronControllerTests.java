@@ -100,8 +100,7 @@ public class PatronControllerTests {
                 "test.lastname",
                 "test.email",
                 "test.phone",
-                LocalDate.now(),
-                List.of()
+                LocalDate.now()
         );
 
         Mockito.when(patronService.getAllPatrons()).thenReturn(List.of(patron));

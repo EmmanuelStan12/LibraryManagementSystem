@@ -1,0 +1,122 @@
+POST http://127.0.0.1:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "test.username",
+  "password": "test.password@1P"
+}
+
+###
+
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+
+{
+  "username": "test.username",
+  "password": "test.password@1P",
+  "firstname": "test.firstname",
+  "lastname": "test.lastname",
+  "email": "test.email@gmail.com"
+}
+
+###
+
+GET http://localhost:8080/api/books
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0LnVzZXJuYW1lIiwiaWF0IjoxNzE1NTY4NTMzLCJpc3MiOiJMaWJyYXJ5TWFuYWdlbWVudFN5c3RlbSIsImV4cCI6MTcxNTY1NDkzM30.PU-XrdgRolpITEfSsW00tZtqmQ6PaR8mkNYb6qO6Dfg
+
+###
+
+POST http://localhost:8080/api/books
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0LnVzZXJuYW1lIiwiaWF0IjoxNzE1NTY4NTMzLCJpc3MiOiJMaWJyYXJ5TWFuYWdlbWVudFN5c3RlbSIsImV4cCI6MTcxNTY1NDkzM30.PU-XrdgRolpITEfSsW00tZtqmQ6PaR8mkNYb6qO6Dfg
+
+{
+  "author": "test.author",
+  "description": "test.description",
+  "title": "test.title.second",
+  "isbn": "test.isbn",
+  "price": 10000,
+  "genre": "Art",
+  "publishedDate": "2024-10-11"
+}
+
+###
+
+PUT http://localhost:8080/api/books/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0LnVzZXJuYW1lIiwiaWF0IjoxNzE1NTY4NTMzLCJpc3MiOiJMaWJyYXJ5TWFuYWdlbWVudFN5c3RlbSIsImV4cCI6MTcxNTY1NDkzM30.PU-XrdgRolpITEfSsW00tZtqmQ6PaR8mkNYb6qO6Dfg
+
+{
+  "author": "test.author.1",
+  "description": "test.new.desc",
+  "isbn": "test.isbn",
+  "price": 10000,
+  "genre": "Art",
+  "publishedDate": "2024-10-11"
+}
+
+###
+
+DELETE http://localhost:8080/api/books/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0LnVzZXJuYW1lIiwiaWF0IjoxNzE1NTY4NTMzLCJpc3MiOiJMaWJyYXJ5TWFuYWdlbWVudFN5c3RlbSIsImV4cCI6MTcxNTY1NDkzM30.PU-XrdgRolpITEfSsW00tZtqmQ6PaR8mkNYb6qO6Dfg
+
+###
+
+
+GET http://localhost:8080/api/patrons
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0LnVzZXJuYW1lIiwiaWF0IjoxNzE1NTY4NTMzLCJpc3MiOiJMaWJyYXJ5TWFuYWdlbWVudFN5c3RlbSIsImV4cCI6MTcxNTY1NDkzM30.PU-XrdgRolpITEfSsW00tZtqmQ6PaR8mkNYb6qO6Dfg
+
+###
+
+GET http://localhost:8080/api/patrons/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0LnVzZXJuYW1lIiwiaWF0IjoxNzE1NTY4NTMzLCJpc3MiOiJMaWJyYXJ5TWFuYWdlbWVudFN5c3RlbSIsImV4cCI6MTcxNTY1NDkzM30.PU-XrdgRolpITEfSsW00tZtqmQ6PaR8mkNYb6qO6Dfg
+
+###
+
+POST http://localhost:8080/api/patrons
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0LnVzZXJuYW1lIiwiaWF0IjoxNzE1NTY4NTMzLCJpc3MiOiJMaWJyYXJ5TWFuYWdlbWVudFN5c3RlbSIsImV4cCI6MTcxNTY1NDkzM30.PU-XrdgRolpITEfSsW00tZtqmQ6PaR8mkNYb6qO6Dfg
+
+{
+  "email": "patron3@test.com",
+  "firstName": "patron.test.firstname",
+  "lastName": "patron.test.lastname",
+  "phone": "patron.test.phone"
+}
+
+###
+
+PUT http://localhost:8080/api/patrons/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0LnVzZXJuYW1lIiwiaWF0IjoxNzE1NTY4NTMzLCJpc3MiOiJMaWJyYXJ5TWFuYWdlbWVudFN5c3RlbSIsImV4cCI6MTcxNTY1NDkzM30.PU-XrdgRolpITEfSsW00tZtqmQ6PaR8mkNYb6qO6Dfg
+
+{
+  "email": "patron.test.2@test.com",
+  "firstName": "patron.test.firstname",
+  "lastName": "patron.test.lastname",
+  "phone": "patron.test.phone"
+}
+
+###
+
+DELETE http://localhost:8080/api/patrons/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0LnVzZXJuYW1lIiwiaWF0IjoxNzE1NTY4NTMzLCJpc3MiOiJMaWJyYXJ5TWFuYWdlbWVudFN5c3RlbSIsImV4cCI6MTcxNTY1NDkzM30.PU-XrdgRolpITEfSsW00tZtqmQ6PaR8mkNYb6qO6Dfg
+
+###
+
+POST http://localhost:8080/api/borrow/1/patron/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0LnVzZXJuYW1lIiwiaWF0IjoxNzE1NTY4NTMzLCJpc3MiOiJMaWJyYXJ5TWFuYWdlbWVudFN5c3RlbSIsImV4cCI6MTcxNTY1NDkzM30.PU-XrdgRolpITEfSsW00tZtqmQ6PaR8mkNYb6qO6Dfg
+
+###
+
+PUT http://localhost:8080/api/return/1/patron/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0LnVzZXJuYW1lIiwiaWF0IjoxNzE1NTY4NTMzLCJpc3MiOiJMaWJyYXJ5TWFuYWdlbWVudFN5c3RlbSIsImV4cCI6MTcxNTY1NDkzM30.PU-XrdgRolpITEfSsW00tZtqmQ6PaR8mkNYb6qO6Dfg
+
+###
